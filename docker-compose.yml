@@ -1,7 +1,9 @@
 version: '3.8'
+
 services:
   postgres:
     image: postgres:15-alpine
+    container_name: cms-postgres-1
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password123
@@ -11,8 +13,20 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: cms-pgadmin-1
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
+    container_name: cms-rabbitmq-1
     ports:
       - "5672:5672"
       - "15672:15672"
